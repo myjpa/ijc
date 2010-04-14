@@ -17,88 +17,115 @@
 	window.ijc = {
 		//memeber variables
 console_ijcwindow : document.getElementById("console_ijcwindow"),
-					code_ijcwindow : document.getElementById("code_ijcwindow"),
-					history_ijcwindow : document.getElementById("history_ijcwindow"),
-					mixedin : false,
-					history : [],
-					history_cursor : 0,
-					//member functions
-					//mixin, unmixin ijc into global namespace
-					mixin : function(){ 
-						if(!ijc.mixedin){
-							for(key in ijc) {window["__original__"+key]=window[key];window[key] = ijc[key];} 
-							ijc.mixedin = true;
+										code_ijcwindow : document.getElementById("code_ijcwindow"),
+										history_ijcwindow : document.getElementById("history_ijcwindow"),
+										mixedin : false,
+										history : [],
+										history_cursor : 0,
+										//member functions
+										//mixin, unmixin ijc into global namespace
+										mixin : function(){ 
+											if(!ijc.mixedin){
+												for(key in ijc) {window["__original__"+key]=window[key];window[key] = ijc[key];} 
+												ijc.mixedin = true;
+											}
+										},
+unmixin : function(){
+						if(ijc.mixedin){
+							for(key in ijc) {window[key] = window["__original__"+key];} 
+							ijc.mixedin = false;
 						}
 					},
-unmixin : function(){
-			  if(ijc.mixedin){
-				  for(key in ijc) {window[key] = window["__original__"+key];} 
-				  ijc.mixedin = false;
-			  }
-		  },
-		  //manipulate history
+					//manipulate history
 add_history : function(record){
-				  if(ijc.history[ijc.history.length-1]!=record) 
-					  ijc.history.push(record);
-				  ijc.history_cursor = ijc.history.length;
+								if(ijc.history[ijc.history.length-1]!=record) 
+									ijc.history.push(record);
+								ijc.history_cursor = ijc.history.length;
 
-			  },
+							},
 prev_history : function(){
-				   return ijc.history_cursor>0 ? ijc.history[--ijc.history_cursor] : undefined;
-			   },
+								 return ijc.history_cursor>0 ? ijc.history[--ijc.history_cursor] : undefined;
+							 },
 next_history : function(){
-				   return ijc.history_cursor<ijc.history.length-1 ? ijc.history[++ijc.history_cursor] : undefined;
-			   },
+								 return ijc.history_cursor<ijc.history.length-1 ? ijc.history[++ijc.history_cursor] : undefined;
+							 },
 
-			   //output to stdout
+							 //output to stdout
 print : function(text) {
-			ijc.history_ijcwindow.value+=text;
-			ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
-		},
+					ijc.history_ijcwindow.value+=text;
+					ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
+				},
 puts : function(text) {
-		   ijc.print(text+"\n");
-	   },
+				 ijc.print(text+"\n");
+			 },
 inspect : function(obj) {
-			  str = obj;
-			  if(typeof(obj)=='object'){
-				  if(obj instanceof Array){
-					  str = "["+obj+"]"
-				  } else if(obj instanceof Object){
-					  str = "{";
-					  for(key in obj) {
-						  str+=key+":"+obj[key]+", ";
-					  }
-					  str += "}";
-				  }
-			  }
-			  return str;
-		  },
+						str = obj;
+						if(typeof(obj)=='object'){
+							if(obj instanceof Array){
+								str = "["+obj+"]"
+							} else if(obj instanceof Object){
+								str = "{";
+								for(key in obj) {
+									str+=key+":"+obj[key]+", ";
+								}
+								str += "}";
+							}
+						}
+						return str;
+					},
 clear : function(){
-			history_ijcwindow.value = "";
-		},
-		//auto completion
-hint : function(str) {
-		   partial_start = str.search(/[^.]+$/);
-		   if(partial_start<0) partial_start = str.length-1;
-		   context = str.substr(0,partial_start).replace(/\.$/,'');
-		   stub = context.length>0 ? context+"." : "";
-		   partial = str.substr(partial_start).replace(/\.$/,'');
-		   try{
-			   results = [];
-			   r = context.length>0 ? eval(context) : window;
-			  if(typeof(r)=='object' && r instanceof Object){
-				  for(key in r){
-					  if(key.indexOf(partial)==0 || partial.length==0)
-						  results.push(stub+key);
-				  }
-				  return results;
-			  } else {
-				  return undefined;
-			  }
-		   }catch(err){
-			   return undefined;
-		   }
-	   },
+					history_ijcwindow.value = "";
+				},
+common_substring : function(array) {
+										 if(array.length==0) return undefined;
+										 if(array.length==1) return array[0];
+										 common = array[0];
+										 for(i=1;i<array.length;i++){
+											 str = array[i];
+											 len = str.length > common.length ? str.length : common.length;
+											 for(j=0;j<len;j++){
+												 if(str[j]!=common[j]) break;
+											 }
+											 common = common.substr(0,j);
+										 }
+										 return common;
+									 },
+				//auto completion
+hint : function(word) {
+				 stub = context = partial="";
+				 //get the last word in the sentence
+				 if(m = word.match(/^(.*[^\w.])?(([\w.]+)\.)$/)){
+						 //end with '.'
+						 stub = (m[1]||"")+(m[2]||"");
+						 stub2 = m[2]||"";
+						 context = m[3]||"";
+						 partial = "";
+						 }else if(m = word.match(/^(.*[^\w.])?(([\w.]+)\.)?(\w+)$/)){
+						 //context
+						 stub = (m[1]||"")+(m[2]||"");
+						 stub2 = m[2]||"";
+						 context = m[3]||"window";
+						 partial = m[4]||"";
+						 }
+						 try{
+							 replacements = [];
+						 results = [];
+						 r = eval(context);
+						 if(typeof(r)=='object' && !(r instanceof Array)){
+						 for(key in r){
+							 if(key.indexOf(partial)==0 || partial.length==0){
+							 replacements.push(stub+key);
+							 results.push(stub2+key);
+							 }
+						 }
+						 return {rep: ijc.common_substring(replacements), hints:results};
+						 } else {
+							 return undefined;
+						 }
+						 }catch(err){
+							 return undefined;
+						 }
+			 },
 
 
 	}
@@ -117,13 +144,15 @@ $('#code_ijcwindow').keydown(function(event){
 		switch(event.keyCode){
 		case 9: //tab
 		if(hints = ijc.hint(ijc.code_ijcwindow.value)){
-		if(hints.length==0){
-		}else if(hints.length==1){
-		ijc.code_ijcwindow.value = hints[0];
+		if(hints.hints.length==0){
+		}else if(hints.hints.length==1){
+		//ijc.code_ijcwindow.value = hints.hints[0];
+		ijc.code_ijcwindow.value = hints.rep;
 		}else{
-		puts('(hint)');
-		for(i=0;i<hints.length;i++) print(hints[i]+"\t");
-		puts('');
+		ijc.puts('(hint)');
+		for(i=0;i<hints.hints.length;i++) ijc.print(hints.hints[i]+"        ");
+		ijc.puts('');
+		if(hints.rep) ijc.code_ijcwindow.value = hints.rep;
 		}
 		}
 		break;
@@ -137,7 +166,7 @@ $('#code_ijcwindow').keydown(function(event){
 		return true;
 		}
 		return false;
-		});
+});
 //mixin ijc methods into global space
 ijc.mixin();
 //set focus
