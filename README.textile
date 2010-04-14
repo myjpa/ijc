@@ -1,0 +1,35 @@
+h1. An Interactive Javascript Console(ijc) running in web browsers
+
+_to make it simple, just treat it as an irb for javascript)
+
+h3. install
+
+(suppose $proj is the directory to store ijc)
+cd $proj
+git clone git://github.com/myjpa/ijc.git
+use your browser to open $proj/ijc/ijc.html
+
+h3. features:
+
+h4. implemented
+
+* the return value of your code will be *inspected* in the output window(the top textarea).
+* support command history.
+* utility functions to print string onto output window(see instructions for details).
+
+h4. unimplemented
+
+* readline style auto-completion.
+* load other javascript library.
+
+h3. instruction:
+
+* enter javascript code snippets in the bottom text box, and hit 'return' to evaluate the result
+* use up arrow key and down arrow key to browse history.
+* utility functions:
+**ijc.puts(obj) : println an obj in output window
+**ijc.print(obj) : print an obj in output window
+**ijc.inspect(obj) : return an inspection of the object as a string.
+**ijc.mixin() : mixin the utility functions above into global namespect.
+**ijc.unmixin() : revoke the mixin.
+
