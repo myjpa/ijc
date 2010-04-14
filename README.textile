@@ -16,11 +16,11 @@ h4. implemented
 * the return value of your code will be *inspected* in the output window(the top textarea).
 * support command history.
 * utility functions to print string onto output window(see instructions for details).
+* readline style auto-completion.
 
 h4. unimplemented
 
-* readline style auto-completion.
-* load other javascript library.
+* load and debug other javascript library.
 
 h3. instruction:
 
