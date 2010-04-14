@@ -1,6 +1,6 @@
 h1. An Interactive Javascript Console(ijc) running in web browsers
 
-_to make it simple, just treat it as an irb for javascript)
+_to make it simple, just treat it as an irb for javascript_
 
 h3. install
 
