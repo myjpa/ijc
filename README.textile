@@ -4,9 +4,9 @@ _to make it simple, just treat it as an irb for javascript_
 
 h3. install
 
-(suppose $proj is the directory to store ijc)
-cd $proj
-git clone git://github.com/myjpa/ijc.git
+_suppose $proj is the directory to store ijc_
+@cd $proj@
+@git clone git://github.com/myjpa/ijc.git@
 use your browser to open $proj/ijc/ijc.html
 
 h3. features:
@@ -27,9 +27,9 @@ h3. instruction:
 * enter javascript code snippets in the bottom text box, and hit 'return' to evaluate the result
 * use up arrow key and down arrow key to browse history.
 * utility functions:
-**ijc.puts(obj) : println an obj in output window
-**ijc.print(obj) : print an obj in output window
-**ijc.inspect(obj) : return an inspection of the object as a string.
-**ijc.mixin() : mixin the utility functions above into global namespect.
-**ijc.unmixin() : revoke the mixin.
+** ijc.puts(obj) : println an obj in output window
+** ijc.print(obj) : print an obj in output window
+** ijc.inspect(obj) : return an inspection of the object as a string.
+** ijc.mixin() : mixin the utility functions above into global namespect.
+** ijc.unmixin() : revoke the mixin.
 
