@@ -1,0 +1,18 @@
+an interactive javascript console
+
+(suppose $proj is the directory to store ijc)
+cd $proj
+git clone git://github.com/myjpa/ijc.git
+use your browser to open $proj/ijc/ijc.html
+
+instruction:
+1. enter javascript code snippets in the bottom text box, and hit 'return' to evaluate the result
+2. the return value will be *inspected* in the output window(the top textarea).
+3. use up arrow key and down arrow key to browse history.
+4. utility functions:
+	ijc.puts(obj) : println an obj in output window
+	ijc.print(obj) : print an obj in output window
+	ijc.inspect(obj) : return an inspection of the object as a string.
+	ijc.mixin() : mixin the utility functions above into global namespect.
+	ijc.unmixin() : revoke the mixin.
+
