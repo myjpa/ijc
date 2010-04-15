@@ -43,7 +43,6 @@ add_history : function(record){
 				  if(ijc.cmd_history[ijc.cmd_history.length-1]!=record) 
 					  ijc.cmd_history.push(record);
 				  ijc.history_cursor = ijc.cmd_history.length;
-
 			  },
 prev_history : function(){
 				   return ijc.history_cursor>0 ? ijc.cmd_history[--ijc.history_cursor] : undefined;
@@ -56,6 +55,14 @@ next_history : function(){
 print : function(text) {
 			ijc.history_ijcwindow.value+=text;
 			ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
+			/*
+			//Firefox doesn't batch the scroll action, so we need a timer to do the scroll, avoiding flash
+			if(!ijc.scroll_history_window_timer){
+				ijc.scroll_history_window_timer = setTimeout(function(){
+						ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
+			});
+			}
+			*/
 		},
 puts : function(text) {
 		   ijc.print(text+"\n");

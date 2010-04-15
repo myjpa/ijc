@@ -33,3 +33,7 @@ h3. instruction:
 ** ijc.mixin() : mixin the utility functions above into global namespect.
 ** ijc.unmixin() : revoke the mixin.
 
+h3. known issues:
+
+* firefox: flashes on using 'tab' to get hint when the history window is overflow, maybe using a timer to scroll the window, or using a buffer for output
+* firefox: command window lost focus on 'tab'
