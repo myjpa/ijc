@@ -66,6 +66,7 @@ puts : function(text) {
 	   },
 inspect : function(obj) {
 			  var str = obj;
+			  try{
 			  if(typeof obj == "string"){
 			  }else if(obj instanceof Array){
 				  str = "["+obj+"]"
@@ -74,6 +75,7 @@ inspect : function(obj) {
 				  for(key in obj) { kv.push(key+":"+obj[key]); }
 				  if(kv.length>0) {str = "{"+kv.join(", ")+"}";}
 			  }
+			  }catch(err){}
 			  return str;
 		  },
 clear : function(){
@@ -147,9 +149,10 @@ hint : function(word) {
 		   }catch(err){
 			   return undefined;
 		   }
+	   },
+load : function(url){
+		   jQuery.getScript(url);
 	   }
-
-
 };
 
 ijc.console_ijcwindow.onsubmit = function() {

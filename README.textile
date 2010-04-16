@@ -32,6 +32,7 @@ h3. instruction:
 ** ijc.inspect(obj) : return an inspection of the object as a string.
 ** ijc.mixin() : mixin the utility functions above into global namespect.
 ** ijc.unmixin() : revoke the mixin.
+** ijc.load(url_to_javascript) : dynamically load & evaluate javascript file.
 
 h3. known issues:
 
