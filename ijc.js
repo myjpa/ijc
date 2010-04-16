@@ -47,6 +47,7 @@ next_history : function(){
 
 			   //output to stdout
 outputbuf : [],
+		  //TODO: tweakable in future
 		  MAX_HISTORY_BYTES : 65536,
 		  flush : function() {
 			ijc.history_ijcwindow.value+=ijc.outputbuf.join('');
@@ -149,20 +150,42 @@ hint : function(word) {
 			   return undefined;
 		   }
 	   },
-load : function(url){
-		   //jQuery.getScript(url,function(r,s){ijc.puts("load '"+url+"' finished. status:"+s};ijc.flush());
-		   jQuery.getScript(url,function(r,s){ijc.puts("load '"+url+"' finished. status:"+s);ijc.flush();});
+loaded_js : [],
+loaded_css : [],
+load : function(url,filetype){
+		   //jQuery.getScript(url,function(r,s){ijc.puts("load '"+url+"' finished. status:"+s);ijc.flush();});
+		   //borrowed from http://www.javascriptkit.com/javatutors/loadjavascriptcss.shtml
+		   if(!filetype) filetype=url.match(/[^.]$/)[0];
+		   if (filetype=="js" && ijc.loaded_js.indexOf(url)<0){
+			   ijc.loaded_js.push(url);
+			   var fileref=document.createElement('script');
+				   fileref.setAttribute("type","text/javascript");
+				   fileref.setAttribute("src", url);
+				   document.getElementsByTagName("head")[0].appendChild(fileref);
+				   return true;
+		   }else if (filetype=="css" && ijc.loaded_css.indexOf(url)<0){
+			   ijc.loaded_css.push(url);
+			   var fileref=document.createElement("link");
+				   fileref.setAttribute("rel", "stylesheet");
+				   fileref.setAttribute("type", "text/css");
+				   fileref.setAttribute("href", url);
+				   document.getElementsByTagName("head")[0].appendChild(fileref);
+				   return true;
+		   }
+		   return false;
 	   },
+loadjs : function(url){return ijc.load(url,'js');},
+loadcss : function(url){return ijc.load(url,'css');},
 evaluate : function() {
-	var c=ijc.code_ijcwindow;
-	var r;
-	ijc.puts(">> "+c.value);
-	ijc.add_history(c.value);
-	try{ r=eval(c.value) } catch(err){ r="Error: "+err.description }
-	if(r!=undefined) ijc.puts(ijc.inspect(r));
-	ijc.flush();
-	c.focus();
-	c.select();
+			   var c=ijc.code_ijcwindow;
+			   var r;
+			   ijc.puts(">> "+c.value);
+			   ijc.add_history(c.value);
+			   try{ r=eval(c.value) } catch(err){ r="Error: "+err.description }
+			   if(r!=undefined) ijc.puts(ijc.inspect(r));
+			   ijc.flush();
+			   c.focus();
+			   c.select();
 		   }
 };
 
@@ -188,7 +211,7 @@ jQuery('#code_ijcwindow').keydown(function(event){
 		case 40://down arrow
 		ijc.code_ijcwindow.value= ijc.next_history()||ijc.code_ijcwindow.value;
 		break;
-		case 13://return
+		case 13://carriage return
 		ijc.evaluate();
 		break;
 		default:
