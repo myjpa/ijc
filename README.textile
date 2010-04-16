@@ -2,6 +2,10 @@ h1. An Interactive Javascript Console(ijc) running in web browsers
 
 _to make it simple, just treat it as an irb for javascript_
 
+h3. license
+
+BSD-like, you can freely use and distribute this piece of code commercially or non-commercially, given the COPYRIGHT is kept.
+
 h3. install
 
 _suppose $proj is the directory to store ijc_
