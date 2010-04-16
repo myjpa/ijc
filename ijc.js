@@ -1,7 +1,6 @@
-jQuery(document).ready(function($) {
+jQuery(document).ready(function() {
 		window.ijc = {
 		//memeber variables
-console_ijcwindow : document.getElementById("console_ijcwindow"),
 code_ijcwindow : document.getElementById("code_ijcwindow"),
 history_ijcwindow : document.getElementById("history_ijcwindow"),
 //code_ijcwindow : jQuery("#code_ijcwindow"),
@@ -151,11 +150,10 @@ hint : function(word) {
 		   }
 	   },
 load : function(url){
-		   jQuery.getScript(url);
-	   }
-};
-
-ijc.console_ijcwindow.onsubmit = function() {
+		   //jQuery.getScript(url,function(r,s){ijc.puts("load '"+url+"' finished. status:"+s};ijc.flush());
+		   jQuery.getScript(url,function(r,s){ijc.puts("load '"+url+"' finished. status:"+s);ijc.flush();});
+	   },
+evaluate : function() {
 	var c=ijc.code_ijcwindow;
 	var r;
 	ijc.puts(">> "+c.value);
@@ -165,8 +163,9 @@ ijc.console_ijcwindow.onsubmit = function() {
 	ijc.flush();
 	c.focus();
 	c.select();
-	return false;
-}
+		   }
+};
+
 jQuery('#code_ijcwindow').keydown(function(event){
 		switch(event.keyCode){
 		case 9: //tab
@@ -177,12 +176,11 @@ jQuery('#code_ijcwindow').keydown(function(event){
 		ijc.code_ijcwindow.value = hints.rep;
 		}else{
 		ijc.puts('(hint)');
-		for(i=0;i<hints.hints.length;i++) ijc.print(hints.hints[i]+"        ");
-		ijc.puts('');
+		ijc.puts(hints.hints.join("\t\t"));
+		ijc.flush();
 		if(hints.rep) ijc.code_ijcwindow.value = hints.rep;
 		}
 		}
-		ijc.flush();
 		break;
 		case 38://up arrow
 		ijc.code_ijcwindow.value= ijc.prev_history()||ijc.code_ijcwindow.value;
@@ -190,14 +188,20 @@ jQuery('#code_ijcwindow').keydown(function(event){
 		case 40://down arrow
 		ijc.code_ijcwindow.value= ijc.next_history()||ijc.code_ijcwindow.value;
 		break;
+		case 13://return
+		ijc.evaluate();
+		break;
 		default:
 		return true;
 		}
 		return false;
 });
+jQuery('#code_ijcevaluate').click(function(){
+		ijc.evaluate();
+		});
 //prevent the code lost focus to submit button(it's next tabstop neighbour).
 //but allow it lost focus to others, eg. people want to copy text in history window
-jQuery('#code_ijcsubmit').focus(function(){
+jQuery('#code_ijcevaluate').focus(function(){
 		setTimeout(function(){ijc.code_ijcwindow.focus()},1);
 		});
 //mixin ijc methods into global space
