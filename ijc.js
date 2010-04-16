@@ -83,14 +83,29 @@ clear : function(){
 common_substring : function(array) {
 					   if(array.length==0) return undefined;
 					   if(array.length==1) return array[0];
-					   var common = array[0];
-					   for(i=1;i<array.length;i++){
-						   var str = array[i];
-						   var len = str.length > common.length ? str.length : common.length;
-						   for(j=0;j<len;j++){
-							   if(str[j]!=common[j]) break;
+					   //msie doesn't support indexing string, so convert it to array
+					   if(jQuery.browser.msie){
+						   var common = array[0].split('');
+						   for(i=1;i<array.length;i++){
+							   var str = array[i].split('');
+							   var len = str.length > common.length ? str.length : common.length;
+							   for(j=0;j<len;j++){
+								   if(str[j]!=common[j]) break;
+							   }
+							   common = common.slice(0,j);
 						   }
-						   common = common.substr(0,j);
+						   common = common.join('');
+					   }
+					   else{
+						   var common = array[0];
+						   for(i=1;i<array.length;i++){
+							   var str = array[i];
+							   var len = str.length > common.length ? str.length : common.length;
+							   for(j=0;j<len;j++){
+								   if(str[j]!=common[j]) break;
+							   }
+							   common = common.substr(0,j);
+						   }
 					   }
 					   return common;
 				   },
@@ -149,10 +164,11 @@ ijc.console_ijcwindow.onsubmit = function() {
 	c.select();
 	return false;
 }
-$('#code_ijcwindow').keydown(function(event){
+jQuery('#code_ijcwindow').keydown(function(event){
 		switch(event.keyCode){
 		case 9: //tab
-		if(hints = ijc.hint(ijc.code_ijcwindow.value)){
+		var hints = ijc.hint(ijc.code_ijcwindow.value);
+		if(hints){
 		if(hints.hints.length==0){
 		}else if(hints.hints.length==1){
 		ijc.code_ijcwindow.value = hints.rep;
@@ -178,7 +194,7 @@ $('#code_ijcwindow').keydown(function(event){
 });
 //prevent the code lost focus to submit button(it's next tabstop neighbour).
 //but allow it lost focus to others, eg. people want to copy text in history window
-$('#code_ijcsubmit').focus(function(){
+jQuery('#code_ijcsubmit').focus(function(){
 		setTimeout(function(){ijc.code_ijcwindow.focus()},1);
 		});
 //mixin ijc methods into global space
