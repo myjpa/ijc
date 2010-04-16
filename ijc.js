@@ -48,23 +48,18 @@ next_history : function(){
 
 			   //output to stdout
 outputbuf : [],
+		  MAX_HISTORY_BYTES : 65536,
 		  flush : function() {
 			ijc.history_ijcwindow.value+=ijc.outputbuf.join('');
+			ijc.outputbuf=[];
+			var len = ijc.history_ijcwindow.value.length;
+			if(len>ijc.MAX_HISTORY_BYTES)
+				ijc.history_ijcwindow.value = ijc.history_ijcwindow.value.substring(len-ijc.MAX_HISTORY_BYTES,len-1);
 			ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
 		  },
 		  
 print : function(text) {
 			ijc.outputbuf.push(text);
-			//ijc.history_ijcwindow.value+=text;
-			//ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
-			/*
-			//Firefox doesn't batch the scroll action, so we need a timer to do the scroll, avoiding flash
-			if(!ijc.scroll_history_window_timer){
-			ijc.scroll_history_window_timer = setTimeout(function(){
-			ijc.history_ijcwindow.scrollTop=ijc.history_ijcwindow.scrollHeight;
-			});
-			}
-			*/
 		},
 puts : function(text) {
 		   ijc.print(text+"\n");

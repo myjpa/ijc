@@ -35,5 +35,3 @@ h3. instruction:
 
 h3. known issues:
 
-* firefox: flashes on using 'tab' to get hint when the history window is overflow, maybe using a timer to scroll the window, or using a buffer for output
-* firefox: command window lost focus on 'tab'
