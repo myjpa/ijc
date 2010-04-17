@@ -15,6 +15,11 @@ use your browser to open $proj/ijc/ijc.html
 
 h3. features:
 
+h4. TODO
+
+* evaluate javascripts in an iframe sandbox
+* more debugging functions, like benchmark function, log function....
+
 h4. implemented
 
 * the return value of your code will be *inspected* in the output window(the top textarea).
