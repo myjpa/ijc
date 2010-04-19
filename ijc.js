@@ -186,7 +186,18 @@ evaluate : function() {
 			   ijc.flush();
 			   c.focus();
 			   c.select();
-		   }
+		   },
+		   //debugger
+callstack : function(){
+				var cs = [];
+				var caller = arguments.callee.caller;
+				//omit ijc.evaluate
+				while(!caller && caller!=ijc.evaluate){
+					cs.push(caller);
+					caller = caller.arguments.callee.caller;
+				}
+				return cs;
+			}
 };
 
 jQuery('#code_ijcwindow').keydown(function(event){

@@ -1,6 +1,6 @@
 h1. An Interactive Javascript Console(ijc) running in web browsers
 
-_to make it simple, just treat it as an irb for javascript_
+_to make it simple, just treat it as an irb for javascript, performing read-eval-print loop forever, but only runs in your browser_
 
 h3. license
 
@@ -43,6 +43,7 @@ h3. instruction:
 ** ijc.unmixin() : revoke the mixin.
 ** ijc.loadjs(url_to_javascript) : dynamically load & evaluate javascript file.
 ** ijc.loadcss(url_to_css) : dynamically load & evaluate stylesheet file.
+** ijc.callstack() : returns an array of all functions in callstack.
 
 h3. known issues:
 
